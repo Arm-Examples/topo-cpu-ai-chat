@@ -1,24 +1,65 @@
 services:
-  cortexa_app:
-    extends:
-      file: cortexa_app/compose.yaml
-      service: cortexa_app
-  cortexm_app:
-    extends:
-      file: cortexm_app/compose.yaml
-      service: cortexm_app
+  llama-server:
+    platform: linux/arm64
     build:
+      context: ./llama-inference
       args:
-        PLATFORM: arm_edge_board
-        REMOTEPROC: m33
+        ENABLE_SVE: OFF
+        MODEL_DOWNLOAD_URL: https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+  chat-ui:
+    platform: linux/arm64
+    build:
+      context: ./simple-chat
+      args:
+        ENABLE_SVE: OFF
+    depends_on:
+      llama-server:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
 
 x-topo:
-  name: "topo-project"
-  description: "topo project"
+  name: "armv9-cpu-llm-chat"
+  description: |
+    Complete LLM chat application optimized for Arm CPU inference.
+
+    This project demonstrates running large language models on CPU
+    using llama.cpp compiled with Arm baseline optimizations and 
+    accelerated using NEON SIMD and SVE (when supported and enabled).
+
+    The stack includes:
+    - llama.cpp server with Arm NEON optimizations (SVE optional)
+    - Qwen2.5-1.5B-Instruct model bundled in the image (~1.12 GB)
+    - Simple web-based chat interface
+    - No GPU required - pure CPU inference
+
+    Perfect for demos and testing! The bundled Qwen2.5-1.5B model allows the
+    project to run immediately without downloading additional models.
+
+    Ideal for testing LLM workloads on Arm hardware without GPU dependencies,
+    showcasing how far you can push NEON acceleration. Rebuild with SVE enabled
+    when wider vectors are available.
+
+  features:
+    - "SVE"
+    - "NEON"
+
   args:
-    PLATFORM:
-      description: Target device to build for
-      default: arm_edge_board
-    REMOTEPROC:
-      description: remoteprocessor name to Target
-      default: m33
+    MODEL_DOWNLOAD_URL:
+      description: "Direct URL to download the GGUF model during image build"
+      default: "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf"
+      example: "https://huggingface.co/.../model.gguf"
+
+    ENABLE_SVE:
+      description: "Enables building with SVE instructions (OFF/ON)"
+      default: "OFF"
+      example: "ON"

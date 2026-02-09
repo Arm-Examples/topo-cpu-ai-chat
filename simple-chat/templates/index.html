@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>{{ title }}</h1>
+            <div class="status" id="status">
+                <span class="status-dot" id="status-dot"></span>
+                <span id="status-text">Checking connection...</span>
+            </div>
+        </header>
+
+        <div class="meta-bar">
+            <div class="meta-item">
+                <div class="meta-label">SVE</div>
+                <div class="meta-value" id="sve-status">{{ enable_sve }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Performance</div>
+                <div class="meta-value" id="perf-stats">- tok/sec</div>
+            </div>
+        </div>
+
+        <div id="chat-container">
+            <div id="messages"></div>
+        </div>
+
+        <div id="input-container">
+            <textarea
+                id="user-input"
+                placeholder="Type your message here..."
+                rows="3"
+            ></textarea>
+            <button id="send-btn" onclick="sendMessage()">Send</button>
+        </div>
+
+        <footer>
+            <p>Powered by llama.cpp on an Arm CPU</p>
+        </footer>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
