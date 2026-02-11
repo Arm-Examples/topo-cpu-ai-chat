@@ -10,7 +10,6 @@ This project demonstrates running large language models on CPU using llama.cpp c
 
 The stack includes:
 - llama.cpp server with Arm NEON optimizations (SVE optional)
-- Qwen2.5-1.5B-Instruct model bundled in the image (~1.12 GB)
 - Simple web-based chat interface
 - No GPU required - pure CPU inference
 
@@ -22,10 +21,10 @@ The stack includes:
 
 ## Build-Time Parameters
 
-| Parameter    | Description              | Default                                                      |
-| ------------ | ------------------------ | ------------------------------------------------------------ |
-| `MODEL_URL`  | GGUF model download link | `https://huggingface.co/.../Qwen2.5-3B-Instruct-Q4_K_M.gguf` |
-| `ENABLE_SVE` | Enable SVE optimizations | `OFF`                                                        |
+| Parameter             | Description              | Default                                                                                                 |
+| --------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `MODEL_DOWNLOAD_URL`  | GGUF model download link | `https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf` |
+| `ENABLE_SVE`          | Enable SVE optimizations | `OFF`                                                                                                   |
 
 ## Usage
 
