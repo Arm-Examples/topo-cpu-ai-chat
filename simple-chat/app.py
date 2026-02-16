@@ -17,11 +17,12 @@ BACKEND_URL = os.getenv('BACKEND_URL', 'http://localhost:8080')
 UI_TITLE = os.getenv('UI_TITLE', 'Arm CPU LLM Chat')
 MAX_TOKENS = int(os.getenv('MAX_TOKENS', '2048'))
 ENABLE_SVE = os.getenv('ENABLE_SVE', 'OFF')
+ENABLE_SME = os.getenv('ENABLE_SME', 'OFF')
 
 @app.route('/')
 def index():
     """Serve the chat interface"""
-    return render_template('index.html', title=UI_TITLE, enable_sve=ENABLE_SVE)
+    return render_template('index.html', title=UI_TITLE, enable_sve=ENABLE_SVE, enable_sme=ENABLE_SME)
 
 @app.route('/api/chat', methods=['POST'])
 def chat():

@@ -5,6 +5,7 @@ ARG LLAMA_CPP_VERSION=b4287
 
 # X-Topo Arg
 ARG ENABLE_SVE
+ARG ENABLE_SME
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
@@ -13,7 +14,12 @@ RUN apt-get update && apt-get install -y \
   git \
   curl \
   pkg-config \
-  libcurl4-openssl-dev \
+  ninja-build \
+  xz-utils \
+  libc6-dev-arm64-cross \
+  linux-libc-dev-arm64-cross \
+  libcurl4-openssl-dev:arm64 \
+  libc6-arm64-cross \
   && rm -rf /var/lib/apt/lists/*
 
 # Clone llama.cpp
@@ -24,25 +30,45 @@ RUN git clone https://github.com/ggerganov/llama.cpp.git && \
 
 WORKDIR /build/llama.cpp
 
+RUN mkdir -p /opt/arm-gnu-toolchain && \
+    curl -L -o /tmp/arm-gnu-toolchain.tar.xz "https://developer.arm.com/-/media/Files/downloads/gnu/15.2.rel1/binrel/arm-gnu-toolchain-15.2.rel1-aarch64-aarch64-none-linux-gnu.tar.xz" && \
+    tar -xJf /tmp/arm-gnu-toolchain.tar.xz -C /opt/arm-gnu-toolchain --strip-components=1 && \
+    rm -f /tmp/arm-gnu-toolchain.tar.xz
+
+RUN mkdir -p /sysroot/usr \
+ && ln -sf /usr/aarch64-linux-gnu /sysroot/usr/aarch64-linux-gnu \
+ && ln -sf /usr/aarch64-linux-gnu/lib /sysroot/lib \
+ && ln -sf /usr/aarch64-linux-gnu/lib /sysroot/usr/lib \
+ && ln -sf /usr/aarch64-linux-gnu/include /sysroot/usr/include \
+ && ln -sf /usr/lib/aarch64-linux-gnu /sysroot/usr/lib/aarch64-linux-gnu || true
+
 # Build llama.cpp with Arm baseline optimizations
 # - GGML_NATIVE is disabled so we can force the target march manually
 # - GGML_SVE allows opting in to SVE explicitly if desired
 # - LLAMA_CURL enables HTTP model downloads (optional)
-# Note: SME (Scalable Matrix Extension) support requires KleidiAI integration
-# via GGML_CPU_KLEIDIAI flag, not GGML_SME (which doesn't exist)
-RUN if [ "$ENABLE_SVE" = "ON" ]; then \
-  TARGET_MARCH="armv8.2-a+sve"; \
+RUN TARGET_MARCH="armv8-a"; \
+  if [ "$ENABLE_SME" = "ON" ]; then \
+  TARGET_MARCH="armv9.2-a+sme"; \
   else \
-  TARGET_MARCH="armv8-a"; \
+  SME_FLAG=""; \
+  fi; \
+  if [ "$ENABLE_SVE" = "ON" ]; then \
+  TARGET_MARCH="${TARGET_MARCH}+sve"; \
   fi; \
   cmake -B build \
   -DCMAKE_BUILD_TYPE=Release \
   -DGGML_NATIVE=OFF \
   -DGGML_SVE=${ENABLE_SVE} \
+  ${SME_FLAG} \
   -DLLAMA_CURL=ON \
   -DBUILD_SHARED_LIBS=OFF \
   -DCMAKE_C_FLAGS="-march=${TARGET_MARCH}" \
   -DCMAKE_CXX_FLAGS="-march=${TARGET_MARCH}" \
+  -DCMAKE_C_COMPILER=/opt/arm-gnu-toolchain/bin/aarch64-none-linux-gnu-gcc \
+  -DCMAKE_CXX_COMPILER=/opt/arm-gnu-toolchain/bin/aarch64-none-linux-gnu-g++ \
+  -DCMAKE_AR=/opt/arm-gnu-toolchain/bin/aarch64-none-linux-gnu-ar \
+  -DCMAKE_RANLIB=/opt/arm-gnu-toolchain/bin/aarch64-none-linux-gnu-ranlib \
+  -DCMAKE_SYSROOT=/sysroot \
   && cmake --build build --config Release --target llama-server -j"$(nproc)"
 
 # Runtime stage
