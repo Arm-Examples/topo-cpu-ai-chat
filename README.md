@@ -10,6 +10,7 @@ This project demonstrates running large language models on CPU using llama.cpp c
 
 The stack includes:
 - llama.cpp server with Arm NEON optimizations (SVE optional)
+- Quantized Qwen2.5-1.5B-Instruct model bundled in the image (~1.12 GB)
 - Simple web-based chat interface
 - No GPU required - pure CPU inference
 
