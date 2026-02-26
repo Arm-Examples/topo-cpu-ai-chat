@@ -1,5 +1,7 @@
 # Arm CPU LLM Chat
 
+> This project is a [Topo](https://github.com/arm/topo) template and follows the [Topo Template Format Specification](https://github.com/arm/Topo-Template-Format).
+
 Complete LLM chat application optimized for Arm CPU inference.
 
 Features: SVE, NEON
