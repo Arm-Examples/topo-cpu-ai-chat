@@ -35,7 +35,7 @@ The easiest way to deploy is using `topo`. Download and install `topo` from [her
 
 ### Clone the project:
 ```bash
-topo clone armv9-cpu-llm-chat <url-to-repo>
+topo clone <url-to-repo> armv9-cpu-llm-chat
 ```
 
 ### Build and Deploy the project:
