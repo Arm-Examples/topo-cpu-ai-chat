@@ -35,12 +35,12 @@ The easiest way to deploy is using `topo`. Download and install `topo` from [her
 
 ### Clone the project:
 ```bash
-topo clone armv9-cpu-llm-chat <url-to-repo>
+topo clone git@github.com:Arm-Examples/topo-v9-cpu-chat.git
 ```
 
 ### Build and Deploy the project:
 ```bash
-cd armv9-cpu-llm-chat
+cd topo-v9-cpu-chat
 topo deploy --target <ip-address-of-target>
 ```
 
