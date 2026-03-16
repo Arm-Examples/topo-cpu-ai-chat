@@ -35,7 +35,7 @@ The easiest way to deploy is using `topo`. Download and install `topo` from [her
 
 ### Clone the project:
 ```bash
-topo clone https://github.com/Arm-Examples/topo-v9-cpu-chat.git
+topo clone git@github.com:Arm-Examples/topo-v9-cpu-chat.git
 ```
 
 ### Build and Deploy the project:
