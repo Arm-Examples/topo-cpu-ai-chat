@@ -1,7 +1,7 @@
 FROM ubuntu:24.04 AS builder
 
 # Build arguments
-ARG LLAMA_CPP_VERSION=b4287
+ARG LLAMA_CPP_VERSION=b8417
 
 # X-Topo Arg
 ARG ENABLE_SVE
@@ -45,6 +45,22 @@ RUN if [ "$ENABLE_SVE" = "ON" ]; then \
   -DCMAKE_CXX_FLAGS="-march=${TARGET_MARCH}" \
   && cmake --build build --config Release --target llama-server -j"$(nproc)"
 
+# Model downloader stage — Python stays out of the final image.
+FROM ubuntu:24.04 AS model-downloader
+
+ARG HF_MODEL
+ARG HF_MODEL_FILE
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  python3 \
+  ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /models
+
+COPY download-model.py /usr/local/bin/download-model.py
+RUN python3 /usr/local/bin/download-model.py "${HF_MODEL}" "${HF_MODEL_FILE}" "/models/model.gguf"
+
 # Runtime stage
 FROM ubuntu:24.04
 
@@ -53,13 +69,9 @@ ENV N_CTX=2048
 ENV N_THREADS=8
 ENV N_BATCH=512
 ENV N_GPU_LAYERS=0
-ENV MODEL_FILE=default.gguf
-
-# X-Topo Arg
-ARG MODEL_DOWNLOAD_URL
 
 # Install runtime dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
   curl \
   libcurl4 \
   ca-certificates \
@@ -69,13 +81,8 @@ RUN apt-get update && apt-get install -y \
 # Copy built binary
 COPY --from=builder /build/llama.cpp/build/bin/llama-server /usr/local/bin/llama-server
 
-# Create directories
-RUN mkdir -p /models
-
-# Download configured model when URL provided
-RUN set -eux; \
-  mkdir -p /models; \
-  curl -fL -o "/models/${MODEL_FILE}" "${MODEL_DOWNLOAD_URL}"
+# Copy downloaded model
+COPY --from=model-downloader /models/ /models/
 
 WORKDIR /app
 
@@ -87,5 +94,5 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
 EXPOSE 8080
 
 # Start llama-server directly with runtime expansion of environment defaults.
-ENTRYPOINT ["/bin/sh", "-c", "exec llama-server --model \"/models/${MODEL_FILE}\" --host 0.0.0.0 --port 8080 --ctx-size \"${N_CTX}\" --threads \"${N_THREADS}\" --batch-size \"${N_BATCH}\" --n-gpu-layers \"${N_GPU_LAYERS}\" \"$@\"", "llama-server"]
+ENTRYPOINT ["/bin/sh", "-c", "exec llama-server --model /models/model.gguf --host 0.0.0.0 --port 8080 --ctx-size \"${N_CTX}\" --threads \"${N_THREADS}\" --batch-size \"${N_BATCH}\" --n-gpu-layers \"${N_GPU_LAYERS}\" \"$@\"", "llama-server"]
 CMD []

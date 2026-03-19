@@ -12,7 +12,7 @@ This project demonstrates running large language models on CPU using llama.cpp c
 
 The stack includes:
 - llama.cpp server with Arm NEON optimizations (SVE optional)
-- Quantized Qwen2.5-1.5B-Instruct model bundled in the image (~1.12 GB)
+- Quantized Qwen3.5-0.8B model bundled in the image
 - Simple web-based chat interface
 - No GPU required - pure CPU inference
 
@@ -22,12 +22,19 @@ The stack includes:
 2. **Docker**: For container orchestration with Topo
 3. **LLM Model**: A GGUF format model (e.g., Llama 3.1, Mistral, etc.)
 
+> **Note:** `HF_MODEL` must point to a Hugging Face repo that contains at least one supported `.gguf` file.
+> If the repo contains multiple `.gguf` files and `HF_MODEL_FILE` is unset, the build auto-selects a CPU-friendly quantization (preferring Q4_K_M).
+> Sharded GGUFs and multimodal projector files (`mmproj`) are rejected with a clear error because this template only supports single-file text model GGUFs today.
+> Not all model repos include GGUF quantizations — look for repos with `-GGUF` in the name.
+> The selected model is baked into the image at `/models/model.gguf`.
+
 ## Build-Time Parameters
 
-| Parameter             | Description              | Default                                                                                                 |
-| --------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------- |
-| `MODEL_DOWNLOAD_URL`  | GGUF model download link | `https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf` |
-| `ENABLE_SVE`          | Enable SVE optimizations | `OFF`                                                                                                   |
+| Parameter        | Description                                            | Default                              |
+| ---------------- | ------------------------------------------------------ | ------------------------------------ |
+| `HF_MODEL`       | Hugging Face model repo ID containing `.gguf` files    | `bartowski/Qwen_Qwen3.5-0.8B-GGUF`   |
+| `HF_MODEL_FILE`  | Optional explicit GGUF filename                        | `""`                                |
+| `ENABLE_SVE`     | Enable SVE optimizations                               | `OFF`                                |
 
 ## Usage
 
@@ -42,6 +49,21 @@ topo clone git@github.com:Arm-Examples/topo-v9-cpu-chat.git
 ```bash
 cd topo-v9-cpu-chat
 topo deploy --target <ip-address-of-target>
+```
+
+### Common Model Selection Examples
+
+Use a different model:
+```bash
+topo deploy --target <ip-address-of-target> \
+  --arg HF_MODEL=unsloth/SmolLM2-135M-Instruct-GGUF
+```
+
+Force an exact GGUF file:
+```bash
+topo deploy --target <ip-address-of-target> \
+  --arg HF_MODEL=bartowski/Qwen_Qwen3.5-0.8B-GGUF \
+  --arg HF_MODEL_FILE=Qwen_Qwen3.5-0.8B-Q5_K_M.gguf
 ```
 
 ### Access the Chat Interface
