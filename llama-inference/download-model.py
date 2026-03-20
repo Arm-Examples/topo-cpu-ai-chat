@@ -11,6 +11,7 @@ from typing import Any
 
 
 QUANT_PRIORITY = ["q4_k_m", "q4_k_s", "q5_k_m", "q5_k_s", "q3_k_m", "q4_0"]
+HF_URL_RE = re.compile(r"^https?://huggingface\.co/([^/]+/[^/]+?)(?:/.*)?$")
 
 
 def fatal(msg: str) -> None:
@@ -64,6 +65,10 @@ def main() -> None:
         fatal("Usage: download-model.py HF_MODEL HF_MODEL_FILE OUTPUT_FILE")
 
     hf_model = sys.argv[1]
+    # Support full HF URLs (e.g. https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF)
+    m = HF_URL_RE.match(hf_model)
+    if m:
+        hf_model = m.group(1)
     hf_model_file = sys.argv[2]
     output_file = Path(sys.argv[3])
 
