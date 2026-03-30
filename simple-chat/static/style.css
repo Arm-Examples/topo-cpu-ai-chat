@@ -259,6 +259,14 @@ header h1 {
     transform: none;
 }
 
+#send-btn.stop {
+    background: linear-gradient(135deg, #f5576c 0%, #ef4444 100%);
+}
+
+#send-btn.stop:hover {
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
 footer {
     padding: 12px 20px;
     background: #f9fafb;

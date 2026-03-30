@@ -1,5 +1,6 @@
 let conversationHistory = [];
 let isGenerating = false;
+let abortController = null;
 const messagesContainer = document.getElementById('messages');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
@@ -39,6 +40,14 @@ async function checkHealth() {
     }
 }
 
+function handleButtonClick() {
+    if (isGenerating) {
+        abortController.abort();
+    } else {
+        sendMessage();
+    }
+}
+
 async function sendMessage() {
     if (isGenerating) return;
 
@@ -46,8 +55,10 @@ async function sendMessage() {
     if (!message) return;
 
     userInput.value = '';
-    sendBtn.disabled = true;
     isGenerating = true;
+    abortController = new AbortController();
+    sendBtn.textContent = 'Stop';
+    sendBtn.classList.add('stop');
 
     addMessage('user', message);
 
@@ -67,7 +78,8 @@ async function sendMessage() {
             body: JSON.stringify({
                 message: message,
                 history: conversationHistory
-            })
+            }),
+            signal: abortController.signal
         });
 
         if (!response.ok) {
@@ -131,10 +143,14 @@ async function sendMessage() {
 
     } catch (error) {
         typingIndicator.remove();
-        addSystemMessage(`Error: ${error.message}`);
+        if (error.name !== 'AbortError') {
+            addSystemMessage(`Error: ${error.message}`);
+        }
     } finally {
         isGenerating = false;
-        sendBtn.disabled = false;
+        abortController = null;
+        sendBtn.textContent = 'Send';
+        sendBtn.classList.remove('stop');
         userInput.focus();
     }
 }
