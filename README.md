@@ -12,7 +12,7 @@ This project demonstrates running large language models on CPU using llama.cpp c
 
 The stack includes:
 - llama.cpp server with Arm NEON optimizations (SVE optional)
-- Quantized Qwen3.5-0.8B model bundled in the image
+- Quantized SmolLM2 135M model bundled in the image
 - Simple web-based chat interface
 - No GPU required - pure CPU inference
 
@@ -32,7 +32,7 @@ The stack includes:
 
 | Parameter        | Description                                            | Default                              |
 | ---------------- | ------------------------------------------------------ | ------------------------------------ |
-| `HF_MODEL`       | Hugging Face model repo ID containing `.gguf` files    | `bartowski/Qwen_Qwen3.5-0.8B-GGUF`   |
+| `HF_MODEL`       | Hugging Face model repo ID containing `.gguf` files    | `unsloth/SmolLM2-135M-Instruct-GGUF` |
 | `HF_MODEL_FILE`  | Optional explicit GGUF filename                        | `""`                                |
 | `ENABLE_SVE`     | Enable SVE optimizations                               | `OFF`                                |
 
@@ -56,7 +56,7 @@ topo deploy --target <ip-address-of-target>
 Use a different model:
 ```bash
 topo deploy --target <ip-address-of-target> \
-  --arg HF_MODEL=unsloth/SmolLM2-135M-Instruct-GGUF
+  --arg HF_MODEL=bartowski/Qwen_Qwen3.5-0.8B-GGUF
 ```
 
 Force an exact GGUF file:

@@ -5,7 +5,7 @@ services:
       context: ./llama-inference
       args:
         ENABLE_SVE: OFF
-        HF_MODEL: bartowski/Qwen_Qwen3.5-0.8B-GGUF
+        HF_MODEL: unsloth/SmolLM2-135M-Instruct-GGUF
         HF_MODEL_FILE: ""
     ports:
       - "8080:8080"
@@ -39,11 +39,11 @@ x-topo:
 
     The stack includes:
     - llama.cpp server with Arm NEON optimizations (SVE optional)
-    - Quantized Qwen3.5-0.8B model bundled in the image
+    - Quantized SmolLM2 135M model bundled in the image
     - Simple web-based chat interface
     - No GPU required - pure CPU inference
 
-    Perfect for demos and testing! The bundled Qwen3.5-0.8B model allows the
+    Perfect for demos and testing! The bundled SmolLM2 135M model allows the
     project to run immediately without downloading additional models.
 
     Ideal for testing LLM workloads on Arm hardware without GPU dependencies,
@@ -57,8 +57,8 @@ x-topo:
   args:
     HF_MODEL:
       description: "Hugging Face model repo ID containing a supported single-file GGUF model"
-      default: "bartowski/Qwen_Qwen3.5-0.8B-GGUF"
-      example: "unsloth/SmolLM2-135M-Instruct-GGUF"
+      default: "unsloth/SmolLM2-135M-Instruct-GGUF"
+      example: "bartowski/Qwen_Qwen3.5-0.8B-GGUF"
 
     HF_MODEL_FILE:
       description: "Exact supported GGUF filename to download; sharded and mmproj files are rejected"
