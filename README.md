@@ -2,13 +2,13 @@
 
 > This project is a [Topo](https://github.com/arm/topo) template and follows the [Topo Template Format Specification](https://github.com/arm/Topo-Template-Format).
 
-Complete LLM chat application optimized for Arm CPU inference.
+Complete LLM chat application optimized for Arm CPU inference using a prebuilt llama.cpp server image.
 
-Features: SVE, NEON
+Features: NEON
 
 ## Overview
 
-This project demonstrates running large language models on CPU using llama.cpp compiled with Arm baseline optimizations and accelerated using NEON SIMD and SVE (when supported and enabled).
+This project demonstrates running large language models on CPU using the official prebuilt llama.cpp server image with a bundled quantized GGUF model. It avoids compiling llama.cpp during Template deployment.
 
 The stack includes:
 - Prebuilt llama.cpp server runtime
@@ -18,7 +18,7 @@ The stack includes:
 
 ## Prerequisites
 
-1. **Arm Hardware**: An Arm system (physical or virtual). Note that SVE support in llama.cpp requires an Armv8.2-A (or newer) CPU with the SVE extension.
+1. **Arm Hardware**: An Arm system (physical or virtual).
 2. **Docker**: For container orchestration with Topo
 3. **LLM Model**: Optional when overriding the bundled default; provide a supported single-file GGUF model (e.g., Llama 3.1, Mistral, etc.)
 
@@ -33,7 +33,6 @@ The stack includes:
 | Parameter    | Description                                                       | Default                                  |
 | ------------ | ----------------------------------------------------------------- | ---------------------------------------- |
 | `MODEL`      | Hugging Face GGUF repo, `<repo>:<filename>`, or direct `.gguf` URL | `unsloth/SmolLM2-135M-Instruct-GGUF`     |
-| `ENABLE_SVE` | Enable SVE optimizations                                          | `OFF`                                    |
 
 ## Usage
 

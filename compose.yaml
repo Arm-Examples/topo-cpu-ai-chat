@@ -4,7 +4,6 @@ services:
     build:
       context: ./llama-inference
       args:
-        ENABLE_SVE: OFF
         MODEL: unsloth/SmolLM2-135M-Instruct-GGUF
     ports:
       - "8080:8080"
@@ -33,12 +32,10 @@ x-topo:
     Perfect for demos and testing! The bundled SmolLM2-135M-Instruct model
     allows the project to run immediately without downloading additional models.
 
-    Ideal for testing LLM workloads on Arm hardware without GPU dependencies,
-    showcasing how far you can push NEON acceleration. Rebuild with SVE enabled
-    when wider vectors are available.
+    Ideal for testing LLM workloads on Arm hardware without GPU dependencies
+    while avoiding a source build during Template deployment.
 
   features:
-    - "SVE"
     - "NEON"
 
   deployment_success_message: |
@@ -55,7 +52,3 @@ x-topo:
         huggingface.task: text-generation
         file.format: gguf
 
-    ENABLE_SVE:
-      description: "Enables building with SVE instructions (OFF/ON)"
-      default: "OFF"
-      example: "ON"
