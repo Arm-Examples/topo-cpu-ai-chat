@@ -58,6 +58,9 @@ x-topo:
       description: "Model artifact reference. Use a Hugging Face GGUF repo ID, repo ID plus filename separated by ':', or a direct .gguf URL."
       default: "unsloth/SmolLM2-135M-Instruct-GGUF"
       example: "unsloth/SmolLM2-135M-Instruct-GGUF:SmolLM2-135M-Instruct-Q4_K_M.gguf"
+      hints:
+        huggingface.task: text-generation
+        file.format: gguf
 
     ENABLE_SVE:
       description: "Enables building with SVE instructions (OFF/ON)"
