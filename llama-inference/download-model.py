@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""Download a GGUF model file from Hugging Face."""
+"""Download a GGUF model file from a model reference."""
 
 import json
 from pathlib import Path
 import re
 import sys
+import urllib.parse
 import urllib.request
 import urllib.error
 from typing import Any
 
 
 QUANT_PRIORITY = ["q4_k_m", "q4_k_s", "q5_k_m", "q5_k_s", "q3_k_m", "q4_0"]
-HF_URL_RE = re.compile(r"^https?://huggingface\.co/([^/]+/[^/]+?)(?:/.*)?$")
+HTTP_URL_RE = re.compile(r"^https?://")
 
 
 def fatal(msg: str) -> None:
@@ -47,6 +48,47 @@ def filter_gguf(filenames: list[str]) -> list[str]:
     return sorted(set(s for s in filenames if s.endswith(".gguf")))
 
 
+def is_http_url(value: str) -> bool:
+    return HTTP_URL_RE.match(value) is not None
+
+
+def parse_huggingface_url(parsed_url: urllib.parse.ParseResult) -> tuple[str, str]:
+    parts = parsed_url.path.strip("/").split("/")
+    if len(parts) < 2:
+        fatal("Hugging Face URLs must include an owner and repo name.")
+
+    hf_model = f"{parts[0]}/{parts[1]}"
+    hf_model_file = ""
+    if len(parts) >= 5 and parts[2] in {"blob", "resolve"}:
+        hf_model_file = "/".join(parts[4:])
+
+    return hf_model, hf_model_file
+
+
+def filename_from_url(url: str) -> str:
+    path = urllib.parse.urlparse(url).path
+    filename = Path(urllib.parse.unquote(path)).name
+    if not filename:
+        fatal("Direct model URLs must include a filename.")
+    return filename
+
+
+def download_direct_url(url: str, output_file: Path) -> None:
+    filename = filename_from_url(url)
+    if not filename.endswith(".gguf"):
+        fatal("Direct model URLs must point to a .gguf file.")
+
+    unsupported_msg = unsupported_reason(filename)
+    if unsupported_msg is not None:
+        fatal(f"'{filename}' is not supported:\n{unsupported_msg}")
+
+    try:
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        urllib.request.urlretrieve(url, str(output_file))
+    except Exception as e:
+        fatal(f"Failed to download '{url}': {e}")
+
+
 def select_best_quantisation(supported_files: list[str]) -> str:
     assert len(supported_files) > 0, "Empty list of supported files passed"
 
@@ -61,16 +103,30 @@ def select_best_quantisation(supported_files: list[str]) -> str:
 
 
 def main() -> None:
-    if len(sys.argv) != 4:
-        fatal("Usage: download-model.py HF_MODEL HF_MODEL_FILE OUTPUT_FILE")
+    if len(sys.argv) != 3:
+        fatal("Usage: download-model.py MODEL OUTPUT_FILE")
 
-    hf_model = sys.argv[1]
-    # Support full HF URLs (e.g. https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF)
-    m = HF_URL_RE.match(hf_model)
-    if m:
-        hf_model = m.group(1)
-    hf_model_file = sys.argv[2]
-    output_file = Path(sys.argv[3])
+    model_ref = sys.argv[1].strip()
+    output_file = Path(sys.argv[2])
+
+    if not model_ref:
+        fatal("MODEL must not be empty.")
+
+    hf_model_file = ""
+    if is_http_url(model_ref):
+        parsed_url = urllib.parse.urlparse(model_ref)
+        if parsed_url.netloc == "huggingface.co":
+            hf_model, hf_model_file = parse_huggingface_url(parsed_url)
+        else:
+            download_direct_url(model_ref, output_file)
+            return
+    else:
+        hf_model, _, hf_model_file = model_ref.partition(":")
+        if "/" not in hf_model:
+            fatal(
+                "MODEL must be a Hugging Face repo ID, '<repo>:<filename>', "
+                "or a direct .gguf URL."
+            )
 
     # Fetch GGUF files
     data = {}
@@ -99,12 +155,12 @@ def main() -> None:
             fatal(
                 f"File '{hf_model_file}' was not found in '{hf_model}'.\n\n"
                 + detail
-                + "\n\nPass one of the filenames exactly as shown, or omit HF_MODEL_FILE to auto-select."
+                + "\n\nPass MODEL as '<repo>:<filename>' exactly, or omit the filename to auto-select."
             )
         unsupported_msg = unsupported_reason(hf_model_file)
         if unsupported_msg is not None:
             fatal(
-                f"'{hf_model}' '{hf_model_file}' is not supported:\n"
+                f"'{hf_model}:{hf_model_file}' is not supported:\n"
                 + unsupported_msg
                 + SUPPORTED_FILES_MSG
             )
@@ -131,7 +187,8 @@ def main() -> None:
         hf_model_file = select_best_quantisation(supported_files)
         print(f"Selected: {hf_model_file}")
 
-    url = f"https://huggingface.co/{hf_model}/resolve/main/{hf_model_file}"
+    quoted_hf_model_file = urllib.parse.quote(hf_model_file)
+    url = f"https://huggingface.co/{hf_model}/resolve/main/{quoted_hf_model_file}"
     try:
         output_file.parent.mkdir(parents=True, exist_ok=True)
         urllib.request.urlretrieve(url, str(output_file))

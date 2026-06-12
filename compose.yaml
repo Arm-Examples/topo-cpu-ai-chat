@@ -5,8 +5,7 @@ services:
       context: ./llama-inference
       args:
         ENABLE_SVE: OFF
-        HF_MODEL: unsloth/SmolLM2-135M-Instruct-GGUF
-        HF_MODEL_FILE: ""
+        MODEL: unsloth/SmolLM2-135M-Instruct-GGUF
     ports:
       - "8080:8080"
     healthcheck:
@@ -55,15 +54,10 @@ x-topo:
     - "NEON"
 
   args:
-    HF_MODEL:
-      description: "Hugging Face model repo ID containing a supported single-file GGUF model"
+    MODEL:
+      description: "Model artifact reference. Use a Hugging Face GGUF repo ID, repo ID plus filename separated by ':', or a direct .gguf URL."
       default: "unsloth/SmolLM2-135M-Instruct-GGUF"
-      example: "bartowski/Qwen_Qwen3.5-0.8B-GGUF"
-
-    HF_MODEL_FILE:
-      description: "Exact supported GGUF filename to download; sharded and mmproj files are rejected"
-      default: ""
-      example: "Qwen_Qwen3.5-0.8B-Q4_0.gguf"
+      example: "unsloth/SmolLM2-135M-Instruct-GGUF:SmolLM2-135M-Instruct-Q4_K_M.gguf"
 
     ENABLE_SVE:
       description: "Enables building with SVE instructions (OFF/ON)"

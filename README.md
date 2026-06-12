@@ -22,19 +22,18 @@ The stack includes:
 2. **Docker**: For container orchestration with Topo
 3. **LLM Model**: A GGUF format model (e.g., Llama 3.1, Mistral, etc.)
 
-> **Note:** `HF_MODEL` must point to a Hugging Face repo that contains at least one supported `.gguf` file.
-> If the repo contains multiple `.gguf` files and `HF_MODEL_FILE` is unset, the build auto-selects a CPU-friendly quantization (preferring Q4_K_M).
+> **Note:** `MODEL` must point to a supported single-file `.gguf` model artifact.
+> Use a Hugging Face repo ID to auto-select a CPU-friendly quantization (preferring Q4_K_M), a Hugging Face repo plus exact filename as `<repo>:<filename>`, or a direct `.gguf` URL.
 > Sharded GGUFs and multimodal projector files (`mmproj`) are rejected with a clear error because this template only supports single-file text model GGUFs today.
 > Not all model repos include GGUF quantizations — look for repos with `-GGUF` in the name.
 > The selected model is baked into the image at `/models/model.gguf`.
 
 ## Build-Time Parameters
 
-| Parameter        | Description                                            | Default                              |
-| ---------------- | ------------------------------------------------------ | ------------------------------------ |
-| `HF_MODEL`       | Hugging Face model repo ID containing `.gguf` files    | `unsloth/SmolLM2-135M-Instruct-GGUF` |
-| `HF_MODEL_FILE`  | Optional explicit GGUF filename                        | `""`                                |
-| `ENABLE_SVE`     | Enable SVE optimizations                               | `OFF`                                |
+| Parameter    | Description                                                       | Default                                  |
+| ------------ | ----------------------------------------------------------------- | ---------------------------------------- |
+| `MODEL`      | Hugging Face GGUF repo, `<repo>:<filename>`, or direct `.gguf` URL | `unsloth/SmolLM2-135M-Instruct-GGUF`     |
+| `ENABLE_SVE` | Enable SVE optimizations                                          | `OFF`                                    |
 
 ## Usage
 
@@ -56,14 +55,13 @@ topo deploy --target <ip-address-of-target>
 Use a different model:
 ```bash
 topo deploy --target <ip-address-of-target> \
-  --arg HF_MODEL=bartowski/Qwen_Qwen3.5-0.8B-GGUF
+  --arg MODEL=bartowski/Qwen_Qwen3.5-0.8B-GGUF
 ```
 
 Force an exact GGUF file:
 ```bash
 topo deploy --target <ip-address-of-target> \
-  --arg HF_MODEL=bartowski/Qwen_Qwen3.5-0.8B-GGUF \
-  --arg HF_MODEL_FILE=Qwen_Qwen3.5-0.8B-Q5_K_M.gguf
+  --arg MODEL=bartowski/Qwen_Qwen3.5-0.8B-GGUF:Qwen_Qwen3.5-0.8B-Q5_K_M.gguf
 ```
 
 ### Access the Chat Interface
