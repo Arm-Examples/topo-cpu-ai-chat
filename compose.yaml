@@ -33,17 +33,17 @@ x-topo:
     Complete LLM chat application optimized for Arm CPU inference.
 
     This project demonstrates running large language models on CPU
-    using llama.cpp compiled with Arm baseline optimizations and 
+    using llama.cpp compiled with Arm baseline optimizations and
     accelerated using NEON SIMD and SVE (when supported and enabled).
 
     The stack includes:
     - llama.cpp server with Arm NEON optimizations (SVE optional)
-    - Quantized SmolLM2 135M model bundled in the image
+    - Quantized SmolLM2-135M-Instruct model bundled in the image
     - Simple web-based chat interface
     - No GPU required - pure CPU inference
 
-    Perfect for demos and testing! The bundled SmolLM2 135M model allows the
-    project to run immediately without downloading additional models.
+    Perfect for demos and testing! The bundled SmolLM2-135M-Instruct model
+    allows the project to run immediately without downloading additional models.
 
     Ideal for testing LLM workloads on Arm hardware without GPU dependencies,
     showcasing how far you can push NEON acceleration. Rebuild with SVE enabled
@@ -52,6 +52,11 @@ x-topo:
   features:
     - "SVE"
     - "NEON"
+
+  deployment_success_message: |
+    Topo CPU AI Chat is running.
+
+    Open http://<target-ip>:3000 in your browser to start chatting.
 
   args:
     MODEL:

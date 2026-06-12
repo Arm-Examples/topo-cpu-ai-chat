@@ -17,7 +17,7 @@ COPY static/ static/
 # Environment defaults
 ENV BACKEND_URL=http://llama-server:8080
 ENV MAX_TOKENS=2048
-ENV UI_TITLE="Arm CPU LLM Chat"
+ENV UI_TITLE="Topo CPU AI Chat"
 ENV ENABLE_SVE=${ENABLE_SVE}
 
 EXPOSE 3000

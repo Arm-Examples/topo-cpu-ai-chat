@@ -1,4 +1,4 @@
-# Arm CPU LLM Chat
+# Topo CPU AI Chat
 
 > This project is a [Topo](https://github.com/arm/topo) template and follows the [Topo Template Format Specification](https://github.com/arm/Topo-Template-Format).
 
@@ -12,7 +12,7 @@ This project demonstrates running large language models on CPU using llama.cpp c
 
 The stack includes:
 - llama.cpp server with Arm NEON optimizations (SVE optional)
-- Quantized SmolLM2 135M model bundled in the image
+- Quantized SmolLM2-135M-Instruct model bundled in the image
 - Simple web-based chat interface
 - No GPU required - pure CPU inference
 
@@ -20,7 +20,7 @@ The stack includes:
 
 1. **Arm Hardware**: An Arm system (physical or virtual). Note that SVE support in llama.cpp requires an Armv8.2-A (or newer) CPU with the SVE extension.
 2. **Docker**: For container orchestration with Topo
-3. **LLM Model**: A GGUF format model (e.g., Llama 3.1, Mistral, etc.)
+3. **LLM Model**: Optional when overriding the bundled default; provide a supported single-file GGUF model (e.g., Llama 3.1, Mistral, etc.)
 
 > **Note:** `MODEL` must point to a supported single-file `.gguf` model artifact.
 > Use a Hugging Face repo ID to auto-select a CPU-friendly quantization (preferring Q4_K_M), a Hugging Face repo plus exact filename as `<repo>:<filename>`, or a direct `.gguf` URL.
@@ -61,9 +61,9 @@ topo deploy --target <ip-address-of-target> \
 Force an exact GGUF file:
 ```bash
 topo deploy --target <ip-address-of-target> \
-  --arg MODEL=bartowski/Qwen_Qwen3.5-0.8B-GGUF:Qwen_Qwen3.5-0.8B-Q5_K_M.gguf
+  --arg MODEL=unsloth/SmolLM2-135M-Instruct-GGUF:SmolLM2-135M-Instruct-Q4_K_M.gguf
 ```
 
 ### Access the Chat Interface
 
-Open your browser to `URL:3000` to start chatting!
+Open your browser to `http://<ip-address-of-target>:3000` to start chatting!

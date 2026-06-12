@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 # Configuration from environment
 BACKEND_URL = os.getenv('BACKEND_URL', 'http://localhost:8080')
-UI_TITLE = os.getenv('UI_TITLE', 'Arm CPU LLM Chat')
+UI_TITLE = os.getenv('UI_TITLE', 'Topo CPU AI Chat')
 MAX_TOKENS = int(os.getenv('MAX_TOKENS', '2048'))
 ENABLE_SVE = os.getenv('ENABLE_SVE', 'OFF')
 
