@@ -11,9 +11,9 @@ Features: SVE, NEON
 This project demonstrates running large language models on CPU using llama.cpp compiled with Arm baseline optimizations and accelerated using NEON SIMD and SVE (when supported and enabled).
 
 The stack includes:
-- llama.cpp server with Arm NEON optimizations (SVE optional)
-- Quantized SmolLM2-135M-Instruct model bundled in the image
-- Simple web-based chat interface
+- Prebuilt llama.cpp server runtime
+- Quantized SmolLM2 135M model bundled in the image
+- Built-in web chat interface
 - No GPU required - pure CPU inference
 
 ## Prerequisites
