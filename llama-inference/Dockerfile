@@ -48,8 +48,7 @@ RUN if [ "$ENABLE_SVE" = "ON" ]; then \
 # Model downloader stage — Python stays out of the final image.
 FROM ubuntu:24.04 AS model-downloader
 
-ARG HF_MODEL
-ARG HF_MODEL_FILE
+ARG MODEL
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   python3 \
@@ -59,7 +58,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN mkdir -p /models
 
 COPY download-model.py /usr/local/bin/download-model.py
-RUN python3 /usr/local/bin/download-model.py "${HF_MODEL}" "${HF_MODEL_FILE}" "/models/model.gguf"
+RUN python3 /usr/local/bin/download-model.py "${MODEL}" "/models/model.gguf"
 
 # Runtime stage
 FROM ubuntu:24.04

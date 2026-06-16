@@ -5,8 +5,7 @@ services:
       context: ./llama-inference
       args:
         ENABLE_SVE: OFF
-        HF_MODEL: unsloth/SmolLM2-135M-Instruct-GGUF
-        HF_MODEL_FILE: ""
+        MODEL: unsloth/SmolLM2-135M-Instruct-GGUF
     ports:
       - "8080:8080"
     healthcheck:
@@ -34,17 +33,17 @@ x-topo:
     Complete LLM chat application optimized for Arm CPU inference.
 
     This project demonstrates running large language models on CPU
-    using llama.cpp compiled with Arm baseline optimizations and 
+    using llama.cpp compiled with Arm baseline optimizations and
     accelerated using NEON SIMD and SVE (when supported and enabled).
 
     The stack includes:
     - llama.cpp server with Arm NEON optimizations (SVE optional)
-    - Quantized SmolLM2 135M model bundled in the image
+    - Quantized SmolLM2-135M-Instruct model bundled in the image
     - Simple web-based chat interface
     - No GPU required - pure CPU inference
 
-    Perfect for demos and testing! The bundled SmolLM2 135M model allows the
-    project to run immediately without downloading additional models.
+    Perfect for demos and testing! The bundled SmolLM2-135M-Instruct model
+    allows the project to run immediately without downloading additional models.
 
     Ideal for testing LLM workloads on Arm hardware without GPU dependencies,
     showcasing how far you can push NEON acceleration. Rebuild with SVE enabled
@@ -54,16 +53,19 @@ x-topo:
     - "SVE"
     - "NEON"
 
-  args:
-    HF_MODEL:
-      description: "Hugging Face model repo ID containing a supported single-file GGUF model"
-      default: "unsloth/SmolLM2-135M-Instruct-GGUF"
-      example: "bartowski/Qwen_Qwen3.5-0.8B-GGUF"
+  deployment_success_message: |
+    Topo CPU AI Chat is running.
 
-    HF_MODEL_FILE:
-      description: "Exact supported GGUF filename to download; sharded and mmproj files are rejected"
-      default: ""
-      example: "Qwen_Qwen3.5-0.8B-Q4_0.gguf"
+    Open http://<target-ip>:3000 in your browser to start chatting.
+
+  args:
+    MODEL:
+      description: "Model artifact reference. Use a Hugging Face GGUF repo ID, repo ID plus filename separated by ':', or a direct .gguf URL."
+      default: "unsloth/SmolLM2-135M-Instruct-GGUF"
+      example: "unsloth/SmolLM2-135M-Instruct-GGUF:SmolLM2-135M-Instruct-Q4_K_M.gguf"
+      hints:
+        huggingface.task: text-generation
+        file.format: gguf
 
     ENABLE_SVE:
       description: "Enables building with SVE instructions (OFF/ON)"
