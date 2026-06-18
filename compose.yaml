@@ -17,11 +17,12 @@ services:
 x-topo:
   name: "Topo CPU AI Chat"
   description: |
-    Complete LLM chat application optimized for Arm CPU inference.
+    Complete LLM chat application for Arm CPU inference.
 
     This project demonstrates running large language models on CPU
-    using llama.cpp compiled with Arm baseline optimizations and
-    accelerated using NEON SIMD and SVE (when supported and enabled).
+    using the official prebuilt llama.cpp server image with a bundled
+    quantized GGUF model. It avoids compiling llama.cpp during Template
+    deployment.
 
     The stack includes:
     - Prebuilt llama.cpp server runtime
@@ -34,9 +35,6 @@ x-topo:
 
     Ideal for testing LLM workloads on Arm hardware without GPU dependencies
     while avoiding a source build during Template deployment.
-
-  features:
-    - "NEON"
 
   deployment_success_message: |
     Topo CPU AI Chat is running.
@@ -51,4 +49,3 @@ x-topo:
       hints:
         huggingface.task: text-generation
         file.format: gguf
-

@@ -2,9 +2,7 @@
 
 > This project is a [Topo](https://github.com/arm/topo) template and follows the [Topo Template Format Specification](https://github.com/arm/Topo-Template-Format).
 
-Complete LLM chat application optimized for Arm CPU inference using a prebuilt llama.cpp server image.
-
-Features: NEON
+Complete LLM chat application for Arm CPU inference using a prebuilt llama.cpp server image.
 
 ## Overview
 
