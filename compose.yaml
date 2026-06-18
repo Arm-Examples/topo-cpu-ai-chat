@@ -24,6 +24,10 @@ x-topo:
     quantized GGUF model. It avoids compiling llama.cpp during Template
     deployment.
 
+    The upstream Linux Arm64 image includes architecture-specific CPU
+    backend variants for Armv8.0 baseline, Armv8.2 dot product/FP16/SVE,
+    Armv8.6 int8 matrix multiply/SVE2, and Armv9.2 SME-capable CPUs.
+
     The stack includes:
     - Prebuilt llama.cpp server runtime
     - Quantized SmolLM2 135M model bundled in the image

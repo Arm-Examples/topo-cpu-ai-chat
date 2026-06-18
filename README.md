@@ -8,11 +8,28 @@ Complete LLM chat application for Arm CPU inference using a prebuilt llama.cpp s
 
 This project demonstrates running large language models on CPU using the official prebuilt llama.cpp server image with a bundled quantized GGUF model. It avoids compiling llama.cpp during Template deployment.
 
+The upstream Linux Arm64 llama.cpp server image is built with architecture-specific CPU backend variants enabled. llama.cpp can then load a backend variant that matches the Arm CPU features available at runtime.
+
 The stack includes:
 - Prebuilt llama.cpp server runtime
 - Quantized SmolLM2 135M model bundled in the image
 - Built-in web chat interface
 - No GPU required - pure CPU inference
+
+## Arm CPU Optimizations
+
+The prebuilt `ghcr.io/ggml-org/llama.cpp:server` image currently enables llama.cpp CPU backend variants for Linux Arm. The upstream tag is floating, so pin the image digest if you need these exact variants to remain stable.
+
+| Backend variant | Arm features included |
+| ---------------- | --------------------- |
+| `armv8.0_1` | Baseline Armv8.0 |
+| `armv8.2_1` | Dot product |
+| `armv8.2_2` | Dot product, FP16 vector arithmetic |
+| `armv8.2_3` | Dot product, FP16 vector arithmetic, SVE |
+| `armv8.6_1` | Dot product, FP16 vector arithmetic, SVE, int8 matrix multiply |
+| `armv8.6_2` | Dot product, FP16 vector arithmetic, SVE, int8 matrix multiply, SVE2 |
+| `armv9.2_1` | Dot product, FP16 vector arithmetic, SVE, int8 matrix multiply, SME |
+| `armv9.2_2` | Dot product, FP16 vector arithmetic, SVE, int8 matrix multiply, SVE2, SME |
 
 ## Prerequisites
 
