@@ -15,18 +15,6 @@ services:
       retries: 3
       start_period: 60s
 
-  chat-ui:
-    platform: linux/arm64
-    build:
-      context: ./simple-chat
-      args:
-        ENABLE_SVE: OFF
-    depends_on:
-      llama-server:
-        condition: service_healthy
-    ports:
-      - "3000:3000"
-
 x-topo:
   name: "Topo CPU AI Chat"
   description: |
@@ -37,9 +25,9 @@ x-topo:
     accelerated using NEON SIMD and SVE (when supported and enabled).
 
     The stack includes:
-    - llama.cpp server with Arm NEON optimizations (SVE optional)
-    - Quantized SmolLM2-135M-Instruct model bundled in the image
-    - Simple web-based chat interface
+    - Prebuilt llama.cpp server runtime
+    - Quantized SmolLM2 135M model bundled in the image
+    - Built-in web chat interface
     - No GPU required - pure CPU inference
 
     Perfect for demos and testing! The bundled SmolLM2-135M-Instruct model
