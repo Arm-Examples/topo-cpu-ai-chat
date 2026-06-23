@@ -13,8 +13,7 @@ RUN mkdir -p /models
 COPY download-model.py /usr/local/bin/download-model.py
 RUN python3 /usr/local/bin/download-model.py "${MODEL}" "/models/model.gguf"
 
-# Runtime stage. Use the official prebuilt llama.cpp server image so deploys
-# do not clone and compile llama.cpp inside the Template build.
+# Runtime stage.
 FROM ghcr.io/ggml-org/llama.cpp:server
 
 # Environment defaults - baked into the start command
