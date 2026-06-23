@@ -12,7 +12,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 60s
+      start_period: 300s
 
 x-topo:
   name: "Topo CPU AI Chat"
@@ -28,12 +28,12 @@ x-topo:
 
     The stack includes:
     - llama.cpp
-    - Quantized SmolLM2 135M model bundled in the image
+    - Quantized SmolLM2 135M default model loaded through llama.cpp
     - Built-in web chat interface
     - No GPU required - pure CPU inference
 
-    Perfect for demos and testing! The bundled SmolLM2-135M-Instruct model
-    allows the project to run immediately without downloading additional models.
+    Perfect for demos and testing! The default SmolLM2-135M-Instruct model
+    gives the project a small ready-to-use model reference by default.
 
     Ideal for testing LLM workloads on Arm hardware without GPU dependencies
     while avoiding a source build during Template deployment.
