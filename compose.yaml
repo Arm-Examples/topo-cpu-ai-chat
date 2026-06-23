@@ -41,7 +41,7 @@ x-topo:
   deployment_success_message: |
     Topo CPU AI Chat is running.
 
-    Open http://<target-ip>:<port> in your browser to start chatting.
+    Open http://<target-ip>:8080 in your browser to start chatting.
 
   args:
     MODEL:
