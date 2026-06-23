@@ -17,12 +17,10 @@ services:
 x-topo:
   name: "Topo CPU AI Chat"
   description: |
-    Complete LLM chat application for Arm CPU inference.
+    Complete LLM chat application optimized for Arm CPU inference.
 
     This project demonstrates running large language models on CPU
-    using the official prebuilt llama.cpp server image with a bundled
-    quantized GGUF model. It avoids compiling llama.cpp during Template
-    deployment.
+    using the llama.cpp server image.
 
     The upstream Linux Arm64 image includes architecture-specific CPU
     backend variants for Armv8.0 baseline, Armv8.2 dot product/FP16/SVE,
