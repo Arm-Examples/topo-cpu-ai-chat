@@ -6,7 +6,7 @@ Complete LLM chat application for Arm CPU inference using a prebuilt llama.cpp s
 
 ## Overview
 
-This project demonstrates running large language models on CPU using the official prebuilt llama.cpp server image with a bundled quantized GGUF model. It avoids compiling llama.cpp during Template deployment.
+This project demonstrates running large language models on CPU using the llama.cpp with a configurable GGUF model.
 
 The upstream Linux Arm64 llama.cpp server image is built with architecture-specific CPU backend variants enabled. llama.cpp can then load a backend variant that matches the Arm CPU features available at runtime.
 
