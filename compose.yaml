@@ -27,7 +27,7 @@ x-topo:
     Armv8.6 int8 matrix multiply/SVE2, and Armv9.2 SME-capable CPUs.
 
     The stack includes:
-    - Prebuilt llama.cpp server runtime
+    - llama.cpp
     - Quantized SmolLM2 135M model bundled in the image
     - Built-in web chat interface
     - No GPU required - pure CPU inference
