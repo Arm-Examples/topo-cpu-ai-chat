@@ -18,7 +18,7 @@ The stack includes:
 
 ## Arm CPU Optimizations
 
-The prebuilt `ghcr.io/ggml-org/llama.cpp:server` image currently enables llama.cpp CPU backend variants for Linux Arm. The upstream tag is floating, so pin the image digest if you need these exact variants to remain stable.
+The prebuilt `ghcr.io/ggml-org/llama.cpp:server` image currently enables llama.cpp CPU backend variants for Linux Arm. This template pins the image digest so these exact variants remain stable.
 
 | Backend variant | Arm features included |
 | ---------------- | --------------------- |
