@@ -11,7 +11,7 @@ This project demonstrates running large language models on CPU using the llama.c
 The upstream Linux Arm64 llama.cpp server image is built with architecture-specific CPU backend variants enabled. llama.cpp can then load a backend variant that matches the Arm CPU features available at runtime.
 
 The stack includes:
-- Prebuilt llama.cpp server runtime
+- llama.cpp
 - Quantized SmolLM2 135M model bundled in the image
 - Built-in web chat interface
 - No GPU required - pure CPU inference
