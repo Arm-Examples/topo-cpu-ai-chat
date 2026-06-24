@@ -4,7 +4,6 @@ services:
     build:
       context: ./llama-inference
       args:
-        ENABLE_SVE: OFF
         MODEL: unsloth/SmolLM2-135M-Instruct-GGUF
     ports:
       - "8080:8080"
@@ -13,7 +12,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 60s
+      start_period: 300s
 
 x-topo:
   name: "Topo CPU AI Chat"
@@ -21,30 +20,28 @@ x-topo:
     Complete LLM chat application optimized for Arm CPU inference.
 
     This project demonstrates running large language models on CPU
-    using llama.cpp compiled with Arm baseline optimizations and
-    accelerated using NEON SIMD and SVE (when supported and enabled).
+    using the llama.cpp server image.
+
+    The upstream Linux Arm64 image includes architecture-specific CPU
+    backend variants for Armv8.0 baseline, Armv8.2 dot product/FP16/SVE,
+    Armv8.6 int8 matrix multiply/SVE2, and Armv9.2 SME-capable CPUs.
 
     The stack includes:
-    - Prebuilt llama.cpp server runtime
-    - Quantized SmolLM2 135M model bundled in the image
+    - llama.cpp
+    - Quantized SmolLM2 135M default model loaded through llama.cpp
     - Built-in web chat interface
     - No GPU required - pure CPU inference
 
-    Perfect for demos and testing! The bundled SmolLM2-135M-Instruct model
-    allows the project to run immediately without downloading additional models.
+    Perfect for demos and testing! The default SmolLM2-135M-Instruct model
+    gives the project a small ready-to-use model reference by default.
 
-    Ideal for testing LLM workloads on Arm hardware without GPU dependencies,
-    showcasing how far you can push NEON acceleration. Rebuild with SVE enabled
-    when wider vectors are available.
-
-  features:
-    - "SVE"
-    - "NEON"
+    Ideal for testing LLM workloads on Arm hardware without GPU dependencies
+    while avoiding a source build during Template deployment.
 
   deployment_success_message: |
     Topo CPU AI Chat is running.
 
-    Open http://<target-ip>:3000 in your browser to start chatting.
+    Open http://<target-ip>:8080 in your browser to start chatting.
 
   args:
     MODEL:
@@ -54,8 +51,3 @@ x-topo:
       hints:
         huggingface.task: text-generation
         file.format: gguf
-
-    ENABLE_SVE:
-      description: "Enables building with SVE instructions (OFF/ON)"
-      default: "OFF"
-      example: "ON"
