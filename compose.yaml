@@ -15,9 +15,9 @@ services:
       start_period: 300s
 
 x-topo:
-  name: "Topo CPU AI Chat"
+  name: "Topo llama web UI Chat"
   description: |
-    Complete LLM chat application with Arm CPU inference provided by llama.cpp.
+    LLM chat application with Arm CPU inference provided by llama.cpp.
 
     This project demonstrates running large language models on CPU
     with inference provided by the llama.cpp server.
