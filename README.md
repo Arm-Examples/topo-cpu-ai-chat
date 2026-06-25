@@ -4,8 +4,6 @@
 
 Complete LLM chat application with Arm CPU inference provided by llama.cpp.
 
-This project uses llama.cpp but is not affiliated with, endorsed by, or sponsored by the llama.cpp project or its maintainers.
-
 ## Overview
 
 This project demonstrates running large language models on CPU with inference provided by the llama.cpp server and a configurable GGUF model.
