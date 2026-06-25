@@ -22,7 +22,7 @@ The stack includes:
 
 The prebuilt `ghcr.io/ggml-org/llama.cpp:server` image currently enables llama.cpp CPU backend variants for Linux Arm. This template pins the image digest so these exact variants remain stable.
 
-The pinned image corresponds to llama.cpp revision `ac4cddeb0dbd778f650bf568f6f08344a06abe3a`. The Linux Arm backend variants and feature combinations are defined in upstream [`ggml/src/CMakeLists.txt`](https://github.com/ggml-org/llama.cpp/blob/ac4cddeb0dbd778f650bf568f6f08344a06abe3a/ggml/src/CMakeLists.txt#L403-L415), and the CPU server image is built with `GGML_CPU_ALL_VARIANTS=ON` in upstream [`.devops/cpu.Dockerfile`](https://github.com/ggml-org/llama.cpp/blob/ac4cddeb0dbd778f650bf568f6f08344a06abe3a/.devops/cpu.Dockerfile#L15-L19).
+The Linux Arm backend variants and feature combinations are defined in upstream [`ggml/src/CMakeLists.txt`](https://github.com/ggml-org/llama.cpp/blob/ac4cddeb0dbd778f650bf568f6f08344a06abe3a/ggml/src/CMakeLists.txt#L403-L415), and the CPU server image is built with `GGML_CPU_ALL_VARIANTS=ON` in upstream [`.devops/cpu.Dockerfile`](https://github.com/ggml-org/llama.cpp/blob/ac4cddeb0dbd778f650bf568f6f08344a06abe3a/.devops/cpu.Dockerfile#L15-L19).
 
 | Backend variant | Arm features included |
 | ---------------- | --------------------- |
