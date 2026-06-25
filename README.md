@@ -64,7 +64,7 @@ topo clone git@github.com:Arm-Examples/topo-llama-web-ui.git
 
 ### Build and Deploy the project:
 ```bash
-cd topo-v9-cpu-chat
+cd topo-lama-web-ui
 topo deploy --target <ip-address-of-target>
 ```
 
