@@ -1,12 +1,12 @@
-# Topo CPU AI Chat
+# Topo llama.cpp web UI
 
 > This project is a [Topo](https://github.com/arm/topo) template and follows the [Topo Template Format Specification](https://github.com/arm/Topo-Template-Format).
 
-Complete LLM chat application for Arm CPU inference using a prebuilt llama.cpp server image.
+Complete LLM chat application with Arm CPU inference provided by llama.cpp.
 
 ## Overview
 
-This project demonstrates running large language models on CPU using the llama.cpp with a configurable GGUF model.
+This project demonstrates running large language models on CPU with inference provided by the llama.cpp server and a configurable GGUF model.
 
 The upstream Linux Arm64 llama.cpp server image is built with architecture-specific CPU backend variants enabled. llama.cpp can then load a backend variant that matches the Arm CPU features available at runtime.
 
@@ -19,6 +19,8 @@ The stack includes:
 ## Arm CPU Optimizations
 
 The prebuilt `ghcr.io/ggml-org/llama.cpp:server` image currently enables llama.cpp CPU backend variants for Linux Arm. This template pins the image digest so these exact variants remain stable.
+
+The Linux Arm backend variants and feature combinations are defined in upstream [`ggml/src/CMakeLists.txt`](https://github.com/ggml-org/llama.cpp/blob/ac4cddeb0dbd778f650bf568f6f08344a06abe3a/ggml/src/CMakeLists.txt#L403-L415), and the CPU server image is built with `GGML_CPU_ALL_VARIANTS=ON` in upstream [`.devops/cpu.Dockerfile`](https://github.com/ggml-org/llama.cpp/blob/ac4cddeb0dbd778f650bf568f6f08344a06abe3a/.devops/cpu.Dockerfile#L15-L19).
 
 | Backend variant | Arm features included |
 | ---------------- | --------------------- |
@@ -55,12 +57,12 @@ The easiest way to deploy is using `topo`. Download and install `topo` from [her
 
 ### Clone the project:
 ```bash
-topo clone git@github.com:Arm-Examples/topo-v9-cpu-chat.git
+topo clone git@github.com:Arm-Examples/topo-llama-web-ui.git
 ```
 
 ### Build and Deploy the project:
 ```bash
-cd topo-v9-cpu-chat
+cd topo-lama-web-ui
 topo deploy --target <ip-address-of-target>
 ```
 
@@ -80,4 +82,4 @@ topo deploy --target <ip-address-of-target> \
 
 ### Access the Chat Interface
 
-Open your browser to `http://<ip-address-of-target>:3000` to start chatting!
+Open your browser to `http://<ip-address-of-target>:8080` to start chatting!

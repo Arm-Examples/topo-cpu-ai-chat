@@ -15,12 +15,12 @@ services:
       start_period: 300s
 
 x-topo:
-  name: "Topo CPU AI Chat"
+  name: "Topo llama.cpp WebUI Chat"
   description: |
-    Complete LLM chat application optimized for Arm CPU inference.
+    LLM chat application with Arm CPU inference provided by llama.cpp.
 
     This project demonstrates running large language models on CPU
-    using the llama.cpp server image.
+    with inference provided by the llama.cpp server.
 
     The upstream Linux Arm64 image includes architecture-specific CPU
     backend variants for Armv8.0 baseline, Armv8.2 dot product/FP16/SVE,
@@ -39,7 +39,7 @@ x-topo:
     while avoiding a source build during Template deployment.
 
   deployment_success_message: |
-    Topo CPU AI Chat is running.
+    Topo llama.cpp WebUI Chat is running.
 
     Open http://<target-ip>:8080 in your browser to start chatting.
 
