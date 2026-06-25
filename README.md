@@ -84,4 +84,4 @@ topo deploy --target <ip-address-of-target> \
 
 ### Access the Chat Interface
 
-Open your browser to `http://<ip-address-of-target>:3000` to start chatting!
+Open your browser to `http://<ip-address-of-target>:8080` to start chatting!
