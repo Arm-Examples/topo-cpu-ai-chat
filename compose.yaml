@@ -15,7 +15,7 @@ services:
       start_period: 300s
 
 x-topo:
-  name: "Topo llama web UI Chat"
+  name: "Topo llama.cpp WebUI Chat"
   description: |
     LLM chat application with Arm CPU inference provided by llama.cpp.
 
