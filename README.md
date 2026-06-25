@@ -1,4 +1,4 @@
-# Topo CPU AI Chat
+# Topo llama.cpp web UI
 
 > This project is a [Topo](https://github.com/arm/topo) template and follows the [Topo Template Format Specification](https://github.com/arm/Topo-Template-Format).
 

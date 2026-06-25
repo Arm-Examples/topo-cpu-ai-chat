@@ -39,7 +39,7 @@ x-topo:
     while avoiding a source build during Template deployment.
 
   deployment_success_message: |
-    Topo CPU AI Chat is running.
+    Topo llama.cpp WebUI Chat is running.
 
     Open http://<target-ip>:8080 in your browser to start chatting.
 
