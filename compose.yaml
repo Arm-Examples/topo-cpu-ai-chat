@@ -36,14 +36,14 @@ x-topo:
     gives the project a small ready-to-use model reference by default.
 
     Ideal for testing LLM workloads on Arm hardware without GPU dependencies
-    while avoiding a source build during Template deployment.
+    while avoiding a source build during Topo Project deployment.
 
   deployment_success_message: |
     Topo llama.cpp WebUI Chat is running.
 
     Open http://<target-ip>:8080 in your browser to start chatting.
 
-  args:
+  args: &args
     MODEL:
       description: "Model artifact reference. Use a Hugging Face GGUF repo ID, repo ID plus filename separated by ':', or a direct .gguf URL."
       default: "unsloth/SmolLM2-135M-Instruct-GGUF"
@@ -51,3 +51,4 @@ x-topo:
       hints:
         huggingface.task: text-generation
         file.format: gguf
+  parameters: *args
