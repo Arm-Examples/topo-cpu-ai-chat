@@ -1,6 +1,6 @@
 # Topo llama.cpp web UI
 
-> This project is a [Topo](https://github.com/arm/topo) template and follows the [Topo Template Format Specification](https://github.com/arm/Topo-Template-Format).
+> This is a [Topo](https://github.com/arm/topo) Project and follows the [Topo Project Specification](https://github.com/arm/topo/tree/main/docs/project-specification).
 
 Complete LLM chat application with Arm CPU inference provided by llama.cpp.
 
@@ -18,7 +18,7 @@ The stack includes:
 
 ## Arm CPU Optimizations
 
-The prebuilt `ghcr.io/ggml-org/llama.cpp:server` image currently enables llama.cpp CPU backend variants for Linux Arm. This template pins the image digest so these exact variants remain stable.
+The prebuilt `ghcr.io/ggml-org/llama.cpp:server` image currently enables llama.cpp CPU backend variants for Linux Arm. This project pins the image digest so these exact variants remain stable.
 
 The Linux Arm backend variants and feature combinations are defined in upstream [`ggml/src/CMakeLists.txt`](https://github.com/ggml-org/llama.cpp/blob/ac4cddeb0dbd778f650bf568f6f08344a06abe3a/ggml/src/CMakeLists.txt#L403-L415), and the CPU server image is built with `GGML_CPU_ALL_VARIANTS=ON` in upstream [`.devops/cpu.Dockerfile`](https://github.com/ggml-org/llama.cpp/blob/ac4cddeb0dbd778f650bf568f6f08344a06abe3a/.devops/cpu.Dockerfile#L15-L19).
 
@@ -41,7 +41,7 @@ The Linux Arm backend variants and feature combinations are defined in upstream 
 
 > **Note:** `MODEL` must point to a supported single-file `.gguf` model artifact.
 > Use a Hugging Face repo ID to auto-select a CPU-friendly quantization (preferring Q4_K_M), a Hugging Face repo plus exact filename as `<repo>:<filename>`, or a direct `.gguf` URL.
-> Sharded GGUFs and multimodal projector files (`mmproj`) are rejected with a clear error because this template only supports single-file text model GGUFs today.
+> Sharded GGUFs and multimodal projector files (`mmproj`) are rejected with a clear error because this project only supports single-file text model GGUFs today.
 > Not all model repos include GGUF quantizations — look for repos with `-GGUF` in the name.
 > The selected model is baked into the image at `/models/model.gguf`.
 
