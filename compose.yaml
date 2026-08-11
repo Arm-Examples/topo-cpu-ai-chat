@@ -39,9 +39,10 @@ x-topo:
     while avoiding a source build during Topo Project deployment.
 
   deployment_success_message: |
-    Topo llama.cpp WebUI Chat is running.
+    Topo llama.cpp WebUI Chat is starting.
 
-    Open http://<target-ip>:8080 in your browser to start chatting.
+    Run `topo ps` and wait until the llama-server service reports a healthy status.
+    Then open http://<target-ip>:8080 in your browser to start chatting.
 
   args: &args
     MODEL:
