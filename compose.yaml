@@ -53,7 +53,7 @@ x-topo:
         - URL to GGUF file (e.g. `https://huggingface.co/unsloth/SmolLM2-135M-Instruct-GGUF/resolve/main/SmolLM2-135M-Instruct-Q4_K_M.gguf`)
       default: "unsloth/SmolLM2-135M-Instruct-GGUF"
       hints:
-        type:
+        meta.type:
           - huggingface.repo-id
         model.task: text-generation
         model.format: gguf
