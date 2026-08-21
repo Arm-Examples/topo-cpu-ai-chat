@@ -46,10 +46,15 @@ x-topo:
 
   args: &args
     MODEL:
-      description: "Model artifact reference. Use a Hugging Face GGUF repo ID, repo ID plus filename separated by ':', or a direct .gguf URL."
+      description: |
+        Model artifact reference. Must be one of: 
+        - Hugging Face GGUF repo ID (e.g. `unsloth/SmolLM2-135M-Instruct-GGUF`)
+        - Hugging Face GGUF repo ID with quantization (e.g. `unsloth/SmolLM2-135M-Instruct-GGUF:Q4_K_M`)
+        - URL to GGUF file (e.g. `https://huggingface.co/unsloth/SmolLM2-135M-Instruct-GGUF/resolve/main/SmolLM2-135M-Instruct-Q4_K_M.gguf`)
       default: "unsloth/SmolLM2-135M-Instruct-GGUF"
-      example: "unsloth/SmolLM2-135M-Instruct-GGUF:SmolLM2-135M-Instruct-Q4_K_M.gguf"
       hints:
-        huggingface.task: text-generation
-        file.format: gguf
+        meta.type:
+          - huggingface.repo-id
+        model.task: text-generation
+        model.format: gguf
   parameters: *args
