@@ -40,16 +40,17 @@ The Linux Arm backend variants and feature combinations are defined in upstream 
 3. **LLM Model**: Optional when overriding the bundled default; provide a supported single-file GGUF model (e.g., Llama 3.1, Mistral, etc.)
 
 > **Note:** `MODEL` must point to a supported single-file `.gguf` model artifact.
-> Use a Hugging Face repo ID to auto-select a CPU-friendly quantization (preferring Q4_K_M), a Hugging Face repo plus exact filename as `<repo>:<filename>`, or a direct `.gguf` URL.
+> Use a Hugging Face repo ID to auto-select a CPU-friendly quantization (preferring Q4_K_M), a Hugging Face repo plus quantization suffix as `<repo>:<quantization>`, or a direct `.gguf` URL.
 > Sharded GGUFs and multimodal projector files (`mmproj`) are rejected with a clear error because this project only supports single-file text model GGUFs today.
 > Not all model repos include GGUF quantizations — look for repos with `-GGUF` in the name.
-> The selected model is baked into the image at `/models/model.gguf`.
+> The selected model is downloaded when the service starts and cached inside the container.
 
 ## Build-Time Parameters
 
-| Parameter    | Description                                                       | Default                                  |
-| ------------ | ----------------------------------------------------------------- | ---------------------------------------- |
-| `MODEL`      | Hugging Face GGUF repo, `<repo>:<filename>`, or direct `.gguf` URL | `unsloth/SmolLM2-135M-Instruct-GGUF`     |
+| Parameter        | Description                                                            | Default                              |
+| ---------------- | ---------------------------------------------------------------------- | ------------------------------------ |
+| `MODEL`          | Hugging Face GGUF repo, `<repo>:<quantization>`, or direct `.gguf` URL | `unsloth/SmolLM2-135M-Instruct-GGUF` |
+| `MODEL_ENDPOINT` | Hugging Face API-compatible endpoint for repository model downloads    | `https://huggingface.co`             |
 
 ## Usage
 
@@ -74,10 +75,10 @@ topo deploy --target <ip-address-of-target> \
   --arg MODEL=bartowski/Qwen_Qwen3.5-0.8B-GGUF
 ```
 
-Force an exact GGUF file:
+Select an exact quantization:
 ```bash
 topo deploy --target <ip-address-of-target> \
-  --arg MODEL=unsloth/SmolLM2-135M-Instruct-GGUF:SmolLM2-135M-Instruct-Q4_K_M.gguf
+  --arg MODEL=unsloth/SmolLM2-135M-Instruct-GGUF:Q4_K_M
 ```
 
 ### Access the Chat Interface
