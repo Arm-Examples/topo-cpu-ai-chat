@@ -5,6 +5,7 @@ services:
       context: ./llama-inference
       args:
         MODEL: unsloth/SmolLM2-135M-Instruct-GGUF
+        MODEL_ENDPOINT: https://huggingface.co
     ports:
       - "8080:8080"
     healthcheck:
@@ -57,4 +58,10 @@ x-topo:
           - huggingface.repo-id
         model.task: text-generation
         model.format: gguf
+    MODEL_ENDPOINT:
+      description: "Hugging Face API compatible endpoint for downloading models"
+      default: "https://huggingface.co"
+      example: "https://hf-mirror.com"
+      hints:
+        meta.type: huggingface.endpoint
   parameters: *args
